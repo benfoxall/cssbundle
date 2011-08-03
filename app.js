@@ -34,5 +34,45 @@ app.get('/', function(req, res){
   });
 });
 
+
+//hacked in stuff
+var fs = require('fs'),
+	_u = require('underscore')._,
+	css_parse = require('./lib/css_parse.js');
+
+var styles;
+fs.readFile('public/stylesheets/style.css', 'utf8', function (err, data) {
+	if (err) throw err;
+	styles = css_parse.parse(data);
+});
+
+var active = {};
+
+app.get('/styles.css', function(req, res){
+	res.header('Content-type', 'text/css');
+	
+	var key = _u(req.query).keys()[0];
+	
+	var css = _u(styles).map(function(s){
+		if(!key || _u.contains(active[key], s.selector)){
+			return s.selector + ' {'+s.properties+'}\n';
+		} else {
+			return '';
+		}
+		
+	})
+	res.send(css.join(""));
+});
+
+app.post('/styles.css', function(req, res){
+	var key = _u(req.query).keys()[0];
+	active[key] || (active[key] = []);
+	
+	res.send("Selectors:" + active[key].join(","));
+	
+})
+
+
+
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
