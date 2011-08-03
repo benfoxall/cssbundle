@@ -64,12 +64,28 @@ app.get('/styles.css', function(req, res){
 	res.send(css.join(""));
 });
 
+// var htmlparser = require("htmlparser");
+// var Apricot = require('apricot');
+var jsdom = require('jsdom');
+
+var $ = require('jquery'); 
+
 app.post('/styles.css', function(req, res){
 	var key = _u(req.query).keys()[0];
 	active[key] || (active[key] = []);
 	
-	res.send("Selectors:" + active[key].join(","));
+	var jq = $('<html><body>' + req.body.content + '</body></html>');
 	
+	_u(styles).each(function(rule){
+		if(!_u.contains(active[key], rule.selector)){
+			if(jq.find(rule.selector).size()){
+				active[key].push(rule.selector);
+			}
+		}
+	})
+	console.log(key, ":", active[key]);
+	
+	res.send("ok");
 })
 
 

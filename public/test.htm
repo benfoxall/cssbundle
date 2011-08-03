@@ -11,18 +11,17 @@
 </head>
 
 <body>
-    <p>This is a test</p>
+    <p>This is a <span id="test">test</span></p>
     
     <input type="submit" value="submit css" id="submit" />
     
     <script type="text/javascript" charset="utf-8">
         $('#submit').click(function(){
             $.post('/styles.css?keyname', {
-                content:document.getElementsByTagName('html')[0].innerHTML
+                content:document.getElementsByTagName('body')[0].innerHTML
             });
         })
     </script>
-
-
+    
 </body>
 </html>

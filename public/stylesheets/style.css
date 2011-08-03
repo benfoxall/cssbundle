@@ -6,3 +6,20 @@ body {
 a {
   color: #00B7FF;
 }
+
+ul{
+	color:#f08;
+	border: 1px solid #999;
+}
+
+li{
+	color:pink;
+}
+
+p{
+	font-weight:bold;
+}
+
+span#test{
+	color:#fc0;
+}
